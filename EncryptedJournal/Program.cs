@@ -27,7 +27,7 @@
         #region Data for all methods
         //These can be rearranged to new mixed groups in the JournalInitializer.CharacterGroups method,
         //but you may need to adjust the strings with escape characters (eg: \ => \\, " => \")
-        static readonly string[] charGroups = { "abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "0123456789", "\'\"+!%/=()\\|[]<>#&@{},?.:-_ " };
+        static readonly string[] charGroups = { "abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "1234567890", "`~!@#$%^&*()-_=+[{]};:'\"\\|,<.>/?" };
 
         static bool InputFlag = false;
         static bool OutputFlag = false;
@@ -261,16 +261,30 @@
         #region Character transformation
         static char CharacterAlteringEncrypt(char character)
         {
-            int groupIndex = Enumerable.Range(0, charGroups.Length).Where(g => charGroups[g].Contains(character)).First();
-            int newIndex = charGroups[groupIndex].IndexOf(character) + charGroups[groupIndex].Length / 3;
-            return newIndex > charGroups[groupIndex].Length - 1 ? charGroups[groupIndex][newIndex - charGroups[groupIndex].Length] : charGroups[groupIndex][groupIndex];
+            try
+            {
+                int groupIndex = Enumerable.Range(0, charGroups.Length).Where(g => charGroups[g].Contains(character)).FirstOrDefault();
+                int newIndex = charGroups[groupIndex].IndexOf(character) + (charGroups[groupIndex].Length / 3);
+                return newIndex > charGroups[groupIndex].Length - 1 ? charGroups[groupIndex][newIndex - charGroups[groupIndex].Length] : charGroups[groupIndex][newIndex];
+            }
+            catch (Exception)
+            {
+                return character;
+            }
         }
 
         static char CharacterAlteringDecrypt(char character)
         {
-            int groupIndex = Enumerable.Range(0, charGroups.Length).Where(g => charGroups[g].Contains(character)).First();
-            int newIndex = charGroups[groupIndex].IndexOf(character) - charGroups[groupIndex].Length / 3;
-            return newIndex < 0 ? charGroups[groupIndex][newIndex + charGroups[groupIndex].Length] : charGroups[groupIndex][groupIndex];
+            try
+            {
+                int groupIndex = Enumerable.Range(0, charGroups.Length).Where(g => charGroups[g].Contains(character)).First();
+                int newIndex = charGroups[groupIndex].IndexOf(character) - (charGroups[groupIndex].Length / 3);
+                return newIndex < 0 ? charGroups[groupIndex][newIndex + charGroups[groupIndex].Length] : charGroups[groupIndex][newIndex];
+            }
+            catch (Exception)
+            {
+                return character;
+            }
         }
         #endregion
 
