@@ -27,7 +27,7 @@
         #region Data for all methods
         //These can be rearranged to new mixed groups in the JournalInitializer.CharacterGroups method,
         //but you may need to adjust the output strings with escape characters (eg: \ => \\, " => \")
-        static readonly string[] charGroups = { "abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "1234567890", "\'\"+!%/=()\\|[]<>#&@{},?.:-_ " };
+        static readonly string[] charGroups = { "abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "1234567890", "~!@#$%^&*()-_=+[{]};:'\"\\|,<.>/? " };
 
         static bool InputFlag = false;
         static bool OutputFlag = false;
