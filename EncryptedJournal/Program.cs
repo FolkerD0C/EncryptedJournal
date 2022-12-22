@@ -60,7 +60,7 @@ public static class Cryption
             "\tl - An option for Output mode,\n" +
                 "\t\toutputs the last file\n" +
             "\ts - An option for Input mode,\n" +
-                "\t\tthe input will be hidden (secret)" +
+                "\t\tthe input will be hidden (secret)\n" +
             "\th - Outputs this help message\n" +
         "Output mode or Input mode are mandatory,\n" +
         "if you provide both, Output mode comes first.\n" +
