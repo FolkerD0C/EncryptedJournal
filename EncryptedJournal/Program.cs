@@ -6,7 +6,15 @@ public class Program
     {
         if (args.Length != 0)
         {
-            Cryption.Run(args);
+            var charArgs = new List<char>();
+            foreach (var item in args)
+            {
+                foreach (var character in item)
+                {
+                    charArgs.Add(character);
+                }
+            }
+            Cryption.Run(charArgs.Distinct());
         }
     }
 }
@@ -70,9 +78,9 @@ public static class Cryption
     /// Main method that runs.
     /// </summary>
     /// <param name="args"></param>
-    public static void Run(string[] args)
+    public static void Run(IEnumerable<char> args)
     {
-        if (args.Contains("h") || HiddenInput().GetStableHashCode() != KeyHash)
+        if (args.Contains('h') || HiddenInput().GetStableHashCode() != KeyHash)
         {
             Console.WriteLine(Options);
             return;
@@ -81,14 +89,14 @@ public static class Cryption
         {
             switch (item)
             {
-                case "i": InputFlag = true; break;
-                case "o": OutputFlag = true; break;
-                case "k": KeyStrokeFlag = true; break;
-                case "f": FileFlag = true; break;
-                case "l": LastFileFlag = true; break;
-                case "s": SecretFlag = true; break;
-                case "e": EncryptFlag = true; break;
-                case "d": DecryptFlag = true; break;
+                case 'i': InputFlag = true; break;
+                case 'o': OutputFlag = true; break;
+                case 'k': KeyStrokeFlag = true; break;
+                case 'f': FileFlag = true; break;
+                case 'l': LastFileFlag = true; break;
+                case 's': SecretFlag = true; break;
+                case 'e': EncryptFlag = true; break;
+                case 'd': DecryptFlag = true; break;
                 default:
                     break;
             }
