@@ -25,6 +25,7 @@ public static class Cryption
     static bool KeyStrokeFlag = false;
     static bool LastFileFlag = false;
     static bool FileFlag = false;
+    static bool SecretFlag = false;
 
     static int FileIndex = -1;
 
@@ -42,6 +43,8 @@ public static class Cryption
                 "\t\t(eg: 0 - \"Journal_0\")\n" +
             "\tl - An option for Output mode,\n" +
                 "\t\toutputs the last file\n" +
+            "\ts - An option for Input mode,\n" +
+                "\t\tthe input will be hidden (secret)" +
             "\th - Outputs this help message\n" +
         "Output mode or Input mode are mandatory,\n" +
         "if you provide both, Output mode comes first.";
@@ -53,7 +56,7 @@ public static class Cryption
     /// <param name="args"></param>
     public static void Run(string[] args)
     {
-        if (args.Contains("h") || PasswordInput().GetStableHashCode() != KeyHash)
+        if (args.Contains("h") || HiddenInput().GetStableHashCode() != KeyHash)
         {
             Console.WriteLine(Options);
             return;
@@ -67,6 +70,7 @@ public static class Cryption
                 case "k": KeyStrokeFlag = true; break;
                 case "f": FileFlag = true; break;
                 case "l": LastFileFlag = true; break;
+                case "s": SecretFlag = true; break;
                 default:
                     break;
             }
@@ -86,7 +90,7 @@ public static class Cryption
     }
 
     //https://stackoverflow.com/questions/23433980/c-sharp-console-hide-the-input-from-console-window-while-typing
-    static string PasswordInput()
+    static string HiddenInput()
     {
         string password = "";
         while (true)
@@ -105,7 +109,15 @@ public static class Cryption
         while (true)
         {
         InputStart:
-            string toEncrypt = Console.ReadLine();
+            string toEncrypt = "";
+            if (SecretFlag)
+            {
+                toEncrypt = HiddenInput();
+            }
+            else
+            {
+                toEncrypt = Console.ReadLine();
+            }
             if (toEncrypt == null || toEncrypt == "") goto InputStart;
             Encrypt(toEncrypt);
         }
