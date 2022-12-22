@@ -1,4 +1,6 @@
-﻿public class Program
+﻿using System.Security.Cryptography;
+
+public class Program
 {
     public static void Main(string[] args)
     {
@@ -26,15 +28,23 @@ public static class Cryption
     static bool LastFileFlag = false;
     static bool FileFlag = false;
     static bool SecretFlag = false;
+    static bool EncryptFlag = false;
+    static bool DecryptFlag = false;
 
     static int FileIndex = -1;
 
+    #region Options
     static readonly string Options =
         "You need to provide the right password first,\n" +
         "then you can enter the journal.\n" +
         "Options:\n" +
-            "\ti - Input mode, compatible with Output mode\n" +
+            "\ti - Input mode, compatible with Output mode,\n" +
+                "\t\tyou can break it with Ctrl + C" +
             "\to - Output mode, compatible with Input mode\n" +
+            "\te - Encrypt mode, you can provide an input\n" +
+                "\t\tand it prints out encrypted\n" +
+            "\td - Decrypt mode, you can provide an encrypted input\n" +
+                "\t\tand it prints out decrypted" +
             "\tk - An option for Output mode,\n" +
                 "\t\tyou need to provide a keystroke\n" +
                 "\t\tfor every entry to be printed\n" +
@@ -47,7 +57,13 @@ public static class Cryption
                 "\t\tthe input will be hidden (secret)" +
             "\th - Outputs this help message\n" +
         "Output mode or Input mode are mandatory,\n" +
-        "if you provide both, Output mode comes first.";
+        "if you provide both, Output mode comes first.\n" +
+        "Encrypt mode and Decrypt mode ar incompatible\n" +
+        "with all other modes, you can break either\n" +
+        "with Ctrl + C.\n" +
+        "Note: Encrypt mode comes first, then Decrypt mode\n" +
+        "and then Output mode and Input mode.";
+    #endregion
     #endregion
 
     /// <summary>
@@ -71,10 +87,14 @@ public static class Cryption
                 case "f": FileFlag = true; break;
                 case "l": LastFileFlag = true; break;
                 case "s": SecretFlag = true; break;
+                case "e": EncryptFlag = true; break;
+                case "d": DecryptFlag = true; break;
                 default:
                     break;
             }
         }
+        if (EncryptFlag) EncryptMode();
+        if (DecryptFlag) DecryptMode();
         if (FileFlag && !LastFileFlag)
         {
             Console.Write("FileIndex: ");
@@ -103,8 +123,30 @@ public static class Cryption
         return password;
     }
 
+    static void EncryptMode()
+    {
+        while (true)
+        {
+        InputStart:
+            string toEncrypt = Console.ReadLine();
+            if (toEncrypt == null || toEncrypt == "") goto InputStart;
+            Console.WriteLine(Encrypt(toEncrypt));
+        }
+    }
+
+    static void DecryptMode()
+    {
+        while (true)
+        {
+        InputStart:
+            string toDecrypt = Console.ReadLine();
+            if (toDecrypt == null || toDecrypt == "") goto InputStart;
+            Console.WriteLine(Decrypt(toDecrypt));
+        }
+    }
+
     #region Input mode
-    public static void InputStream()
+    static void InputStream()
     {
         while (true)
         {
@@ -119,18 +161,17 @@ public static class Cryption
                 toEncrypt = Console.ReadLine();
             }
             if (toEncrypt == null || toEncrypt == "") goto InputStart;
-            Encrypt(toEncrypt);
+            JournalEntryAppendix(Encrypt(DateTime.Now.ToString("F") + $" - {toEncrypt}"));
         }
     }
 
-    static void Encrypt(string input)
+    static string Encrypt(string input)
     {
-        input = DateTime.Now.ToString("F") + $" - {input}";
         var firstTransformation = input.Select(c => CharacterAlteringEncrypt(c));
         var secondTransformation = firstTransformation.Select((c, i) => i % 2 != 0 && i % 5 != 0 ? c : char.IsUpper(c) ? char.ToLower(c) : char.ToUpper(c)).ToArray();
         var temp = new string(Enumerable.Range(0, secondTransformation.Length).Where(i => (i + 1) % 3 == 0).Select(i => secondTransformation[i]).Reverse().ToArray());
         var thirdTransformation = new string(Enumerable.Range(0, secondTransformation.Length).Where(i => (i + 1) % 3 != 0).Select(i => secondTransformation[i]).ToArray()) + temp;
-        JournalEntryAppendix(thirdTransformation);
+        return thirdTransformation;
     }
 
     static void JournalEntryAppendix(string entry)
@@ -156,7 +197,7 @@ public static class Cryption
     #endregion
 
     #region Output mode
-    public static void OutputStream()
+    static void OutputStream()
     {
         var journals = Directory.GetFiles(".").Where(s => s.Contains("Journal")).OrderBy(s => s);
         if (FileFlag && File.Exists($"Journal_{FileIndex}"))
