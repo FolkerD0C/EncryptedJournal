@@ -148,6 +148,10 @@ public static class Cryption
             fileCreation.Close();
         }
         File.AppendAllLines(journal, new string[] { entry });
+        if (SecretFlag)
+        {
+            Console.WriteLine("New entry successfully added.");
+        }
     }
     #endregion
 
