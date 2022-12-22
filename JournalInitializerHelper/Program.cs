@@ -1,5 +1,4 @@
 ﻿using EncryptedJournal;
-using System.Windows.Forms;
 namespace JournalInitializerHelper
 {
     class HelperClass
@@ -8,7 +7,7 @@ namespace JournalInitializerHelper
         static void Main()
         {
             Console.WriteLine(Cryption.GetStableHashCode(Console.ReadLine()));
-            CharacterGroups(5);
+            CharacterGroups(4);
         }
 
         static void CharacterGroups(int groupCount)
@@ -59,7 +58,6 @@ namespace JournalInitializerHelper
                     allCharacters = allCharacters.Remove(index, 1);
                 }
             }
-            Clipboard.SetText("{ \"" + string.Join("\", \"", groups) + "\" }");
             Console.WriteLine("{ \"" + string.Join("\", \"", groups) + "\" }");
         }
     }

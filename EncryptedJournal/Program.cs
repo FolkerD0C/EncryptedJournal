@@ -26,8 +26,8 @@
 
         #region Data for all methods
         //These can be rearranged to new mixed groups in the JournalInitializer.CharacterGroups method,
-        //but you may need to adjust the strings with escape characters (eg: \ => \\, " => \")
-        static readonly string[] charGroups = { "abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "1234567890", "`~!@#$%^&*()-_=+[{]};:'\"\\|,<.>/?" };
+        //but you may need to adjust the output strings with escape characters (eg: \ => \\, " => \")
+        static readonly string[] charGroups = { "abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "1234567890", "\'\"+!%/=()\\|[]<>#&@{},?.:-_ " };
 
         static bool InputFlag = false;
         static bool OutputFlag = false;
@@ -35,10 +35,11 @@
         static bool LastFileFlag = false;
         static bool FileFlag = false;
         static bool SecretFlag = false;
-        static bool EncryptFlag = false;
-        static bool DecryptFlag = false;
 
         static int FileIndex = -1;
+
+        static string InputFile = "";
+        static string OutputFile = "";
 
         #region Options
         static readonly string Options =
@@ -46,12 +47,18 @@
             "then you can enter the journal.\n" +
             "Options:\n" +
                 "\ti - Input mode, compatible with Output mode,\n" +
-                    "\t\tyou can break it with Ctrl + C" +
+                    "\t\tyou can break it with Ctrl + C\n" +
                 "\to - Output mode, compatible with Input mode\n" +
                 "\te - Encrypt mode, you can provide an input\n" +
                     "\t\tand it prints out encrypted\n" +
                 "\td - Decrypt mode, you can provide an encrypted input\n" +
-                    "\t\tand it prints out decrypted" +
+                    "\t\tand it prints out decrypted\n" +
+                "\tm - Import mode, you can encrypt regular text,\n" +
+                    "\t\tasks for an input file and an output file\n" +
+                "\tx - EXport mode, you can decrypt regular text,\n" +
+                    "\t\tasks for an input file and an output file\n" +
+                "\ts - An option for Input mode,\n" +
+                    "\t\tthe input will be hidden (secret)\n" +
                 "\tk - An option for Output mode,\n" +
                     "\t\tyou need to provide a keystroke\n" +
                     "\t\tfor every entry to be printed\n" +
@@ -60,16 +67,15 @@
                     "\t\t(eg: 0 - \"Journal_0\")\n" +
                 "\tl - An option for Output mode,\n" +
                     "\t\toutputs the last file\n" +
-                "\ts - An option for Input mode,\n" +
-                    "\t\tthe input will be hidden (secret)\n" +
                 "\th - Outputs this help message\n" +
-            "Output mode or Input mode are mandatory,\n" +
-            "if you provide both, Output mode comes first.\n" +
-            "Encrypt mode and Decrypt mode ar incompatible\n" +
-            "with all other modes, you can break either\n" +
-            "with Ctrl + C.\n" +
-            "Note: Encrypt mode comes first, then Decrypt mode\n" +
-            "and then Output mode and Input mode.";
+            "One of the six modes is mandatory, if you provide\n" +
+            "both Output mode and Input mode, Output mode comes first.\n" +
+            "Encrypt mode, Decrypt mode, Import mode and\n" +
+            "Output mode are incompatible with all other modes.\n" +
+            "You can break Input mode, Encrypt mode and\n" +
+            "Decrypt mode with Ctrl + C.\n" +
+            "Note: For Encrypt mode, Decrypt mode, Import mode\n" +
+            "and Export mode whichever you pass as an option comes first.";
         #endregion
         #endregion
 
@@ -84,6 +90,7 @@
                 Console.WriteLine(Options);
                 return;
             }
+            Console.WriteLine("Password OK");
             foreach (var item in args)
             {
                 switch (item)
@@ -94,14 +101,14 @@
                     case 'f': FileFlag = true; break;
                     case 'l': LastFileFlag = true; break;
                     case 's': SecretFlag = true; break;
-                    case 'e': EncryptFlag = true; break;
-                    case 'd': DecryptFlag = true; break;
+                    case 'e': EncryptMode(); return;
+                    case 'd': DecryptMode(); return;
+                    case 'm': ImportMode(); return;
+                    case 'x': ExportMode(); return;
                     default:
                         break;
                 }
             }
-            if (EncryptFlag) EncryptMode();
-            if (DecryptFlag) DecryptMode();
             if (FileFlag && !LastFileFlag)
             {
                 Console.Write("FileIndex: ");
@@ -150,6 +157,54 @@
                 if (toDecrypt == null || toDecrypt == "") goto InputStart;
                 Console.WriteLine(Decrypt(toDecrypt));
             }
+        }
+
+        static void ImportMode()
+        {
+            Console.WriteLine("You asked for import mode.");
+            Console.Write("InputFile: ");
+            InputFile = Console.ReadLine();
+            if (!File.Exists(InputFile))
+            {
+                throw new Exception("File does not exists.");
+            }
+            Console.Write("OutpuFile: ");
+            OutputFile = Console.ReadLine();
+            if (File.Exists(OutputFile))
+            {
+                Console.Write("WARNING! File already exists, do you want to proceed? (yes/anything else) ");
+                if (Console.ReadLine() != "yes")
+                {
+                    return;
+                }
+            }
+            var input = File.ReadAllLines(InputFile);
+            var output = input.Select(s => Encrypt(s)).ToArray();
+            File.WriteAllLines(OutputFile, output);
+        }
+
+        static void ExportMode()
+        {
+            Console.WriteLine("You asked for export mode.");
+            Console.Write("InputFile: ");
+            InputFile = Console.ReadLine();
+            if (!File.Exists(InputFile))
+            {
+                throw new Exception("File does not exists.");
+            }
+            Console.Write("OutpuFile: ");
+            OutputFile = Console.ReadLine();
+            if (File.Exists(OutputFile))
+            {
+                Console.Write("WARNING! File already exists, do you want to proceed? (yes/anything else) ");
+                if (Console.ReadLine() != "yes")
+                {
+                    return;
+                }
+            }
+            var input = File.ReadAllLines(InputFile);
+            var output = input.Select(s => Decrypt(s)).ToArray();
+            File.WriteAllLines(OutputFile, output);
         }
 
         #region Input mode
