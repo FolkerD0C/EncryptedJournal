@@ -1,6 +1,4 @@
-﻿using System.Security.Cryptography;
-
-public class Program
+﻿public class Program
 {
     public static void Main(string[] args)
     {
@@ -159,7 +157,7 @@ public static class Cryption
         while (true)
         {
         InputStart:
-            string toEncrypt = "";
+            string toEncrypt;
             if (SecretFlag)
             {
                 toEncrypt = HiddenInput();
