@@ -172,7 +172,7 @@
             OutputFile = Console.ReadLine();
             if (File.Exists(OutputFile))
             {
-                Console.Write("WARNING!  File already exists, do you want to proceed? (yes/anything else) ");
+                Console.Write("WARNING! File already exists, do you want to proceed? (yes/anything else) ");
                 if (Console.ReadLine() != "yes")
                 {
                     return;
