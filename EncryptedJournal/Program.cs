@@ -29,7 +29,7 @@
         #region Data for all methods
         //These can be rearranged to new mixed groups in the JournalInitializer.CharacterGroups method,
         //but you may need to adjust the output strings with escape characters (eg: \ => \\, " => \")
-        static readonly string[] charGroups = { "abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "1234567890", "\'\"+!%/=()\\|[]<>#&@{},?.:-_ " };
+        static readonly string[] charGroups = { "abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "1234567890", "~!@#$%^&*()-_=+[{]};:'\"\\|,<.>/? " };
 
         static bool InputFlag = false;
         static bool OutputFlag = false;
@@ -40,8 +40,8 @@
 
         static int FileIndex = -1;
 
-        static string InputFile = "";
-        static string OutputFile = "";
+        static string? InputFile = "";
+        static string? OutputFile = "";
 
         #region Options
         static readonly string Options =
@@ -115,7 +115,7 @@
             if (FileFlag && !LastFileFlag)
             {
                 Console.Write("FileIndex: ");
-                int.TryParse(Console.ReadLine(), out FileIndex);
+                _ = int.TryParse(Console.ReadLine(), out FileIndex);
             }
             if (InputFlag && OutputFlag)
             {
@@ -146,7 +146,7 @@
             while (true)
             {
             InputStart:
-                string toEncrypt = Console.ReadLine();
+                string? toEncrypt = Console.ReadLine();
                 if (toEncrypt == null || toEncrypt == "") goto InputStart;
                 Console.WriteLine(Encrypt(toEncrypt));
             }
@@ -157,7 +157,7 @@
             while (true)
             {
             InputStart:
-                string toDecrypt = Console.ReadLine();
+                string? toDecrypt = Console.ReadLine();
                 if (toDecrypt == null || toDecrypt == "") goto InputStart;
                 Console.WriteLine(Decrypt(toDecrypt));
             }
@@ -217,7 +217,7 @@
             while (true)
             {
             InputStart:
-                string toEncrypt;
+                string? toEncrypt;
                 if (SecretFlag)
                 {
                     toEncrypt = HiddenInput();
@@ -295,7 +295,7 @@
                 {
                     if ((j + 1 + tempForCounting) % 3 == 0)
                     {
-                        reordering += entry[entry.Length - 1];
+                        reordering += entry[^1];
                         entry = entry.Remove(entry.Length - 1);
                         reordering += entry[j];
                         tempForCounting++;
