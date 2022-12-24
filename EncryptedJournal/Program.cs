@@ -24,7 +24,7 @@
         //You can use JournalInitializerHelper to hash a new HashCode
         static readonly int KeyHash = 0;
 
-        static string WorkingDir = @".";
+        static readonly string WorkingDir = @".";
 
         #region Data for all methods
         //These can be rearranged to new mixed groups in the JournalInitializer.CharacterGroups method,

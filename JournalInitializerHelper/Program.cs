@@ -12,7 +12,7 @@ namespace JournalInitializerHelper
 
         static void CharacterGroups(int groupCount)
         {
-            Random rnd = new Random();
+            Random rnd = new();
             string allCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789~!@#$%^&*()-_=+[{]};:'\"\\|,<.>/? ";
             string[] groups = new string[groupCount];
             int[] groupCounts = new int[groupCount];
