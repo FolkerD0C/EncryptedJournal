@@ -24,6 +24,8 @@
         //You can use JournalInitializerHelper to hash a new HashCode
         static readonly int KeyHash = 0;
 
+        static string WorkingDir = @".";
+
         #region Data for all methods
         //These can be rearranged to new mixed groups in the JournalInitializer.CharacterGroups method,
         //but you may need to adjust the output strings with escape characters (eg: \ => \\, " => \")
@@ -109,6 +111,7 @@
                         break;
                 }
             }
+            Directory.SetCurrentDirectory(WorkingDir);
             if (FileFlag && !LastFileFlag)
             {
                 Console.Write("FileIndex: ");
@@ -126,15 +129,16 @@
         //https://stackoverflow.com/questions/23433980/c-sharp-console-hide-the-input-from-console-window-while-typing
         static string HiddenInput()
         {
-            string password = "";
+            string input = "";
             while (true)
             {
                 var key = Console.ReadKey(true);
                 if (key.Key == ConsoleKey.Enter)
                     break;
-                password += key.KeyChar;
+                if (key.Key == ConsoleKey.Backspace && input != "") input = input.Remove(input.Length - 1, 1);
+                input += key.KeyChar;
             }
-            return password;
+            return input;
         }
 
         static void EncryptMode()
