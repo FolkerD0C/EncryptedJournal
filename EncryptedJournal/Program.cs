@@ -135,8 +135,14 @@
                 var key = Console.ReadKey(true);
                 if (key.Key == ConsoleKey.Enter)
                     break;
-                if (key.Key == ConsoleKey.Backspace && input != "") input = input.Remove(input.Length - 1, 1);
-                input += key.KeyChar;
+                if (key.Key == ConsoleKey.Backspace && input != "")
+                {
+                    input = input.Remove(input.Length - 1, 1);
+                }
+                else
+                {
+                    input += key.KeyChar;
+                }
             }
             return input;
         }
