@@ -51,5 +51,5 @@ $AfterBuildMainProj[23] = $DefaultKeyHash
 $AfterBuildMainProj[25] = $DefaultWorkingDir
 $AfterBuildMainProj[28] = $DefaultCharacterGroups
 Set-Content -Path "EncryptedJournal\Program.cs" -Value $AfterBuildMainProj
-Remove-Item "$OutpurDir\JournalInitializerHelper.exe"
+Remove-Item "$OutputDir\JournalInitializerHelper.exe"
 Remove-Item "$OutputDir\helperOutput.txt"
