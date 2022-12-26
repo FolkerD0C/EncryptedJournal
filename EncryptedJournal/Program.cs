@@ -54,7 +54,7 @@ namespace EncryptedJournal
                     "\t\tand it prints out decrypted\n" +
                 "\tm - Import mode, you can encrypt regular text,\n" +
                     "\t\tasks for an input file and an output file\n" +
-                "\tx - EXport mode, you can decrypt regular text,\n" +
+                "\tx - Export mode, you can decrypt regular text,\n" +
                     "\t\tasks for an input file and an output file\n" +
                 "\tw - You can set a new working directory for\n" +
                     "\t\tthe current run\n" +

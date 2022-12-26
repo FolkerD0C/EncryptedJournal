@@ -53,13 +53,13 @@ $MainProj[25] = "`t`tstatic readonly string WorkingDir = @`"$WorkingDirectory`";
 $MainProj[28] = $NewCharGroups
 Set-Content -Path "EncryptedJournal\Program.cs" -Value $MainProj
 
-$BuildSucceded = $false
+$BuildSucceeded = $false
 #Build main project
 dotnet publish EncryptedJournal --runtime win-x86 --self-contained true --output $OutputDir | out-null
 if ($?)
 {
     echo "Journal successfully builded"
-    $BuildSucceded = $true
+    $BuildSucceeded = $true
 }
 
 #Reset config file and EncryptedJournal\Program.cs and delete help output
@@ -71,7 +71,7 @@ $AfterBuildMainProj[28] = $DefaultCharacterGroups
 Set-Content -Path "EncryptedJournal\Program.cs" -Value $AfterBuildMainProj
 Remove-Item "$OutputDir\JournalInitializerHelper.exe"
 Remove-Item "$OutputDir\helperOutput.txt"
-if ($BuildSucceded)
+if ($BuildSucceeded)
 {
     echo "`nYou can find EncryptedJournal.exe in $OutputDir"
 }
