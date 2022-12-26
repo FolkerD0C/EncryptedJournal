@@ -68,6 +68,7 @@ namespace EncryptedJournal
                     "\t\t(eg: 0 - \"Journal_0\")\n" +
                 "\tl - An option for Output mode,\n" +
                     "\t\toutputs the last file\n" +
+                "\tg - Get info (working directory, characterGroups)\n" +
                 "\th - Outputs this help message\n" +
             "One of the six modes is mandatory, if you provide\n" +
             "both Output mode and Input mode, Output mode comes first.\n" +
@@ -92,6 +93,14 @@ namespace EncryptedJournal
                 return;
             }
             Console.WriteLine("Password OK");
+            if (args.Contains('g'))
+            {
+                Console.WriteLine("_.-Working Directory-._\n" + WorkingDir + "\n\n_.-Charcter Groups-._\n");
+                foreach (var item in charGroups)
+                {
+                    Console.WriteLine(item);
+                }
+            }
             Directory.SetCurrentDirectory(WorkingDir);
             if (args.Contains('w'))
             {
