@@ -1,0 +1,6 @@
+[InitializerConfig]
+Password=pass
+CharacterGroupsCount=4
+
+[JournalConfig]
+WorkingDirectory=.

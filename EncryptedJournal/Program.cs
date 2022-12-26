@@ -1,4 +1,4 @@
-﻿namespace EncryptedJournal
+namespace EncryptedJournal
 {
     public class Program
     {
@@ -21,15 +21,12 @@
 
     public static class Cryption
     {
-        //You can use JournalInitializerHelper to hash a new HashCode
-        static readonly int KeyHash = 0;
+		static readonly int KeyHash = -1872639815;
 
-        static readonly string WorkingDir = @".";
+		static readonly string WorkingDir = @".";
 
         #region Data for all methods
-        //These can be rearranged to new mixed groups in the JournalInitializer.CharacterGroups method,
-        //but you may need to adjust the output strings with escape characters (eg: \ => \\, " => \")
-        static readonly string[] charGroups = { "abcdefghijklmnopqrstuvwxyz", "ABCDEFGHIJKLMNOPQRSTUVWXYZ", "1234567890", "~!@#$%^&*()-_=+[{]};:'\"\\|,<.>/? " };
+		static readonly string[] charGroups = { "aábcdeéfghiíjklmnoóöőpqrstuúüűvwxyz", "AÁBCDEÉFGHIÍJKLMNOÓÖŐPQRSTUÚÜŰVWXYZ", "0123456789", "~!@#$%^&*()-_=+[{]};:'|,<.>/? " };
 
         static bool InputFlag = false;
         static bool OutputFlag = false;
@@ -87,6 +84,7 @@
         /// <param name="args"></param>
         public static void Run(IEnumerable<char> args)
         {
+            Directory.SetCurrentDirectory(WorkingDir);
             if (args.Contains('h') || HiddenInput().GetStableHashCode() != KeyHash)
             {
                 Console.WriteLine(Options);
@@ -111,7 +109,6 @@
                         break;
                 }
             }
-            Directory.SetCurrentDirectory(WorkingDir);
             if (FileFlag && !LastFileFlag)
             {
                 Console.Write("FileIndex: ");
@@ -254,7 +251,7 @@
                 fileCreation.Close();
             }
             var journal = Directory.GetFiles(".").Where(s => s.Contains("journal")).OrderBy(s => s).Last();
-            if (new FileInfo(journal).Length > 102400)
+            if (new FileInfo(journal).Length > 20480)
             {
                 journal = "journal_" + (int.Parse(journal.Split('_')[1]) + 1);
                 var fileCreation = File.Create(journal);
@@ -354,7 +351,7 @@
         #endregion
 
         //https://stackoverflow.com/questions/36845430/persistent-hashcode-for-strings
-        public static int GetStableHashCode(this string str)
+        static int GetStableHashCode(this string str)
         {
             unchecked
             {

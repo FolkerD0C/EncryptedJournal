@@ -5,7 +5,13 @@ VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EncryptedJournal", "EncryptedJournal\EncryptedJournal.csproj", "{984B48B5-54F7-487B-8FC7-058F386CA956}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "JournalInitializerHelper", "JournalInitializerHelper\JournalInitializerHelper.csproj", "{F5AA4A18-8487-4E45-A5B5-B025742D22CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "JournalInitializerHelper", "JournalInitializerHelper\JournalInitializerHelper.csproj", "{F5AA4A18-8487-4E45-A5B5-B025742D22CD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1F21D326-917C-4F54-9DDF-5A462DB30F73}"
+	ProjectSection(SolutionItems) = preProject
+		JournalBuilder.ps1 = JournalBuilder.ps1
+		JournalBuilderConfig.txt = JournalBuilderConfig.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

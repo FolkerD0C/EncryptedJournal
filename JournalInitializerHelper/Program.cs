@@ -1,19 +1,24 @@
-﻿using EncryptedJournal;
-namespace JournalInitializerHelper
+﻿namespace JournalInitializerHelper
 {
-    class HelperClass
+    static class HelperClass
     {
-        [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
-            Console.WriteLine(Cryption.GetStableHashCode(Console.ReadLine()));
-            CharacterGroups(4);
+            string[] arr = new string[2];
+            arr[0] = $"\t\tstatic readonly int KeyHash = {GetStableHashCode(args[0])};";
+            arr[1] = CharacterGroups(int.Parse(args[1]));
+            File.WriteAllLines(args[2], arr);
         }
 
-        static void CharacterGroups(int groupCount)
+        static string CharacterGroups(int groupCount)
         {
             Random rnd = new();
-            string allCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789~!@#$%^&*()-_=+[{]};:'\"\\|,<.>/? ";
+            string allCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789~!@#$%^&*()-_=+[{]};:'|,<.>/? áéíóöőúüűÁÉÍÓÖŐÚÜŰ";
+            string copyStr = "";
+            foreach (var item in allCharacters)
+            {
+                copyStr += item;
+            }
             string[] groups = new string[groupCount];
             int[] groupCounts = new int[groupCount];
             for (int i = 0; i < groupCount; i++)
@@ -58,7 +63,30 @@ namespace JournalInitializerHelper
                     allCharacters = allCharacters.Remove(index, 1);
                 }
             }
-            Console.WriteLine("{ \"" + string.Join("\", \"", groups) + "\" }");
+            if (new string(copyStr.OrderBy(x => x).ToArray()) != new string(string.Join("", groups).OrderBy(x => x).ToArray()))
+            {
+                throw new Exception("The input and output does not match");
+            }
+            return "\t\tstatic readonly string[] charGroups = { \"" + string.Join("\", \"", groups) + "\" };";
+        }
+
+        static int GetStableHashCode(this string str)
+        {
+            unchecked
+            {
+                int hash1 = 5381;
+                int hash2 = hash1;
+
+                for (int i = 0; i < str.Length && str[i] != '\0'; i += 2)
+                {
+                    hash1 = (hash1 << 5) + hash1 ^ str[i];
+                    if (i == str.Length - 1 || str[i + 1] == '\0')
+                        break;
+                    hash2 = (hash2 << 5) + hash2 ^ str[i + 1];
+                }
+
+                return hash1 + hash2 * 1566083941;
+            }
         }
     }
 }
