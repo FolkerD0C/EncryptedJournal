@@ -56,6 +56,8 @@ namespace EncryptedJournal
                     "\t\tasks for an input file and an output file\n" +
                 "\tx - EXport mode, you can decrypt regular text,\n" +
                     "\t\tasks for an input file and an output file\n" +
+                "\tw - You can set a new working directory for\n" +
+                    "\t\tthe current run\n" +
                 "\ts - An option for Input mode,\n" +
                     "\t\tthe input will be hidden (secret)\n" +
                 "\tk - An option for Output mode,\n" +
@@ -70,7 +72,7 @@ namespace EncryptedJournal
             "One of the six modes is mandatory, if you provide\n" +
             "both Output mode and Input mode, Output mode comes first.\n" +
             "Encrypt mode, Decrypt mode, Import mode and\n" +
-            "Output mode are incompatible with all other modes.\n" +
+            "Export mode are incompatible with all other modes.\n" +
             "You can break Input mode, Encrypt mode and\n" +
             "Decrypt mode with Ctrl + C.\n" +
             "Note: For Encrypt mode, Decrypt mode, Import mode\n" +
@@ -84,13 +86,18 @@ namespace EncryptedJournal
         /// <param name="args"></param>
         public static void Run(IEnumerable<char> args)
         {
-            Directory.SetCurrentDirectory(WorkingDir);
             if (args.Contains('h') || HiddenInput().GetStableHashCode() != KeyHash)
             {
                 Console.WriteLine(Options);
                 return;
             }
             Console.WriteLine("Password OK");
+            Directory.SetCurrentDirectory(WorkingDir);
+            if (args.Contains('w'))
+            {
+                Console.Write("WorkingDirectory: ");
+                Directory.SetCurrentDirectory(Console.ReadLine());
+            }
             foreach (var item in args)
             {
                 switch (item)
