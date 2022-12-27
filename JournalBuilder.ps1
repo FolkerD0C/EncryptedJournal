@@ -3,7 +3,7 @@ $ConfigTemplate = @('[InitializerConfig]', 'Password=pass', 'CharacterGroupsCoun
 
 #Get the config that will be set in the .cs files before building
 $ActualConfig = Get-Content -Path 'JournalBuilderConfig.txt'
-echo "The content of the config file has been read"
+Write-Output "The content of the config file has been read"
 
 #Get the actual data from config
 $PasswordToHash = ($ActualConfig[1] -Split '=')[1]
@@ -19,21 +19,21 @@ if (Test-Path -Path $OutputDir)
 mkdir $OutputDir -erroraction 'silentlycontinue' | out-null
 if ($?)
 {
-    echo "Output folder successfully created"
+    Write-Output "Output folder successfully created"
 }
 
 #Build helper project
 dotnet publish JournalInitializerHelper --runtime win-x86 --self-contained true --output $OutputDir | out-null
 if ($?)
 {
-    echo "Helper successfully builded"
+    Write-Output "Helper successfully builded"
 }
 
 #Get data from the helper
 OutputDirectory\JournalInitializerHelper.exe $PasswordToHash $CharacterGroupsCount "$OutputDir\helperOutput.txt"
 if ($?)
 {
-    echo "Helper successfully ran"
+    Write-Output "Helper successfully ran"
 }
 $HelperOutput = Get-Content -Path $OutputDir\helperOutput.txt
 $NewKeyHash = $HelperOutput[0]
@@ -58,7 +58,7 @@ $BuildSucceeded = $false
 dotnet publish EncryptedJournal --runtime win-x86 --self-contained true --output $OutputDir | out-null
 if ($?)
 {
-    echo "Journal successfully builded"
+    Write-Output "Journal successfully builded"
     $BuildSucceeded = $true
 }
 
@@ -73,5 +73,5 @@ Remove-Item "$OutputDir\JournalInitializerHelper.exe"
 Remove-Item "$OutputDir\helperOutput.txt"
 if ($BuildSucceeded)
 {
-    echo "`nYou can find EncryptedJournal.exe in $OutputDir"
+    Write-Output "`nYou can find EncryptedJournal.exe in $OutputDir"
 }
