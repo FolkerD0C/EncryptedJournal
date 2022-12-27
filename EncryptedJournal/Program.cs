@@ -11,7 +11,7 @@ namespace EncryptedJournal
                 {
                     foreach (var character in item)
                     {
-                        charArgs.Add(character);
+                        charArgs.Add(char.ToLower(character));
                     }
                 }
                 Cryption.Run(charArgs.Distinct());
