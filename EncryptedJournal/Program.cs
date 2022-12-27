@@ -95,7 +95,7 @@ namespace EncryptedJournal
             Console.WriteLine("Password OK");
             if (args.Contains('g'))
             {
-                Console.WriteLine("_.-Working Directory-._\n" + WorkingDir + "\n\n_.-Charcter Groups-._\n");
+                Console.WriteLine("\n_.-Working Directory-._\n" + WorkingDir + "\n\n_.-Charcter Groups-._\n");
                 foreach (var item in charGroups)
                 {
                     Console.WriteLine(item);
