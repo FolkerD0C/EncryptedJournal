@@ -100,6 +100,7 @@ namespace EncryptedJournal
                 {
                     Console.WriteLine(item);
                 }
+                return;
             }
             Directory.SetCurrentDirectory(WorkingDir);
             if (args.Contains('w'))

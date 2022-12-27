@@ -16,7 +16,7 @@ if (Test-Path -Path $OutputDir)
 {
 	Remove-Item -Recurse -Force $OutputDir -erroraction 'silentlycontinue'
 }
-mkdir $OutputDir -erroraction 'silentlycontinue'
+mkdir $OutputDir -erroraction 'silentlycontinue' | out-null
 if ($?)
 {
     echo "Output folder successfully created"
